@@ -9,11 +9,11 @@
   <div id="msg" class="msg" hidden></div>
   <div id="sections"></div>
   <div class="card plan" id="planBox" hidden><h2>其他職務功能</h2><div id="plans"></div></div>
-  <div class="card demo" id="probeBox" hidden>
-    <h2>展示：越權查詢測試</h2>
-    <p style="font-size:13px;color:#7a5200;margin:0 0 8px">刻意請求一個不屬於您的分區，驗證後端會拒絕。前端不傳角色，權限一律由後端判斷。</p>
-    <button class="btn red" id="btnProbe"></button>
-    <div id="probeResult"></div>
+  <div class="card" id="pickBox" hidden>
+    <h2>依分區查詢報名名單</h2>
+    <p style="font-size:13px;color:#7a8294;margin:0 0 10px">點選任一分區。每次查詢都由後端依您的職務即時判斷是否有權限，無權限會被拒絕並留下存取紀錄。</p>
+    <div id="pick" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px"></div>
+    <div id="pickResult" style="margin-top:12px"></div>
   </div>
 </main>
 <script>
@@ -45,14 +45,19 @@ async function load() {
   $('roles').innerHTML = r.roles.map((x) => '<span>' + esc(x) + '</span>').join('');
   $('sections').innerHTML = r.sections.map((s) => s.type === 'district' ? districtHtml(s) : s.type === 'stats' ? statsHtml(s) : allHtml(s)).join('');
   if (r.planned.length) { $('planBox').hidden = false; $('plans').innerHTML = r.planned.map((p) => '<a href="' + planned(p.item, p.phase) + '">' + esc(p.item) + '<span>規劃中 ›</span></a>').join(''); }
-  if (r.probe) { $('probeBox').hidden = false; $('btnProbe').textContent = '嘗試查詢' + r.probe + '（展示越權）'; $('btnProbe').onclick = () => probe(r.probe); }
+  $('pickBox').hidden = false;
+  $('pick').innerHTML = r.districts.map((d) => '<button class="btn line" style="margin:0;padding:10px 4px;font-size:15px" data-d="' + esc(d) + '">' + esc(d) + '</button>').join('');
+  $('pick').querySelectorAll('button').forEach((b) => { b.onclick = () => pick(b.dataset.d, b); });
 }
-async function probe(d) {
-  $('btnProbe').disabled = true;
+async function pick(d, btn) {
+  $('pick').querySelectorAll('button').forEach((b) => { b.disabled = true; b.style.background = ''; b.style.color = ''; });
+  btn.style.background = '#12294a'; btn.style.color = '#fff';
+  $('pickResult').innerHTML = '<div class="msg">查詢「' + esc(d) + '」中…</div>';
   const r = await api('officerDistrict', { district: d });
-  $('btnProbe').disabled = false;
-  $('probeResult').innerHTML = r.ok ? '<div class="msg warn">意外：查詢成功</div>'
-    : '<div class="msg err" style="margin-top:10px">⛔ 後端拒絕：您沒有查詢「' + esc(d) + '」的權限。<br><small>此次嘗試已記錄於存取紀錄。</small></div>';
+  $('pick').querySelectorAll('button').forEach((b) => { b.disabled = false; });
+  if (r.ok) $('pickResult').innerHTML = '<div class="msg ok">✅ 有權限：以下為「' + esc(d) + '」的即時資料</div>' + districtHtml(r.section);
+  else if (r.error === 'FORBIDDEN') $('pickResult').innerHTML = '<div class="msg err">⛔ 後端拒絕：您的職務沒有查詢「' + esc(d) + '」名單的權限。<br><small>此次嘗試已記錄於存取紀錄。</small></div>';
+  else $('pickResult').innerHTML = '<div class="msg err">' + esc(ERRTXT[r.error] || r.error) + '</div>';
 }
 startLiff(load);
 </script></body></html>
