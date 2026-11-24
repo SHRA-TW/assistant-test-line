@@ -1,0 +1,20 @@
+body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;background:#f3f5f9;color:#1d2433}
+header{background:#12294a;color:#fff;padding:18px 18px 16px}
+header h1{margin:0;font-size:21px}
+header p{margin:4px 0 0;font-size:13px;opacity:.8}
+main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.card h2{font-size:16px;margin:0 0 10px}
+.msg{padding:12px;border-radius:10px;background:#fff;line-height:1.6;margin-bottom:14px}
+.msg.err{background:#fdecea;color:#a12622}.msg.ok{background:#e7f6ec;color:#1d6b38}.msg.warn{background:#fff6e0;color:#7a5200}
+.chips span{display:inline-block;background:#fff3d6;color:#7a5200;border-radius:12px;padding:3px 10px;margin:0 6px 6px 0;font-size:13px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:15px}.kv .k{color:#7a8294}.kv .v{text-align:right}
+.light{display:flex;align-items:center;gap:10px;font-weight:bold;font-size:18px;margin-bottom:12px}.dot{width:22px;height:22px;border-radius:50%}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px 4px;border-bottom:1px solid #edf0f4;text-align:left}th{color:#7a8294;font-weight:normal;font-size:12px}
+.num{font-size:28px;font-weight:bold;color:#12294a}.bar{height:8px;background:#e8ecf3;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:#c8102e}
+.btn{display:block;width:100%;box-sizing:border-box;text-align:center;padding:12px;border-radius:10px;border:0;font-size:16px;margin-top:10px;text-decoration:none;background:#12294a;color:#fff}
+.btn.red{background:#c8102e}.btn.gold{background:#f2b530;color:#12294a}.btn.line{background:#fff;color:#12294a;border:1px solid #cfd6e2}
+.plan a{display:flex;justify-content:space-between;padding:12px 4px;border-bottom:1px solid #edf0f4;color:#1d2433;text-decoration:none}.plan a span{color:#9aa1ae;font-size:13px}
+.demo{border:2px dashed #f2b530;background:#fffaf0}
+input{width:100%;box-sizing:border-box;font-size:18px;padding:11px;border:1px solid #cfd6e2;border-radius:10px;letter-spacing:3px;text-transform:uppercase}
+.foot{text-align:center;color:#aab;font-size:12px}

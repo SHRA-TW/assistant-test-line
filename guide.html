@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>功能全貌</title><link rel="stylesheet" href="common.css"><script src="config.js"></script></head>
+<body>
+<header><h1>功能全貌</h1><p>SHRA 會務資訊系統｜選單會認人，每個人只看到自己用得到的功能</p></header>
+<main>
+  <div class="card" style="padding:8px"><a href="guide_map.png"><img src="guide_map.png" alt="LINE 官方帳號功能全覽" style="width:100%;border-radius:8px"></a>
+    <p class="foot">點圖可放大</p></div>
+  <div class="card plan"><h2>更多</h2>
+    <a href="planned.html?item=%E6%95%99%E5%AD%B8%E5%BD%B1%E7%89%87&phase=1">教學影片<span>規劃中 ›</span></a>
+    <a href="planned.html?item=%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C&phase=1">常見問題<span>規劃中 ›</span></a>
+    <a href="planned.html?item=%E8%81%AF%E7%B5%A1%E7%A7%98%E6%9B%B8%E8%99%95&phase=1">聯絡秘書處<span>規劃中 ›</span></a>
+  </div>
+  <a class="btn red" id="site" href="#">前往協會網站</a>
+</main>
+<script>
+const u = (window.APP_CONFIG || {}).SITE_URL || '';
+document.getElementById('site').href = /^https?:/.test(u) ? u : 'planned.html?item=' + encodeURIComponent('協會網站') + '&phase=1';
+</script></body></html>

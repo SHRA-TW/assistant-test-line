@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>功能規劃中</title><link rel="stylesheet" href="common.css"></head>
+<body>
+<header><h1 id="t">功能規劃中</h1><p>SHRA 會務資訊系統</p></header>
+<main><div class="card" style="text-align:center;padding:32px 18px">
+  <div style="font-size:44px">🛠️</div>
+  <h2 id="item" style="font-size:20px;margin:10px 0"></h2>
+  <p id="phase" style="color:#5a6375;line-height:1.7"></p>
+  <button class="btn line" onclick="history.length > 1 ? history.back() : window.close()">返回</button>
+</div></main>
+<script>
+const q = new URLSearchParams(location.search);
+const item = q.get('item') || '此功能';
+const ph = ({ '1': '第一階段', '2': '第二階段', '3': '第三階段' })[q.get('phase')] || '後續階段';
+document.getElementById('item').textContent = '「' + item + '」';
+document.getElementById('phase').textContent = '此功能規劃中，將於' + ph + '上線。';
+</script></body></html>

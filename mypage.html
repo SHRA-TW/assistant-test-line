@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的專區</title><link rel="stylesheet" href="common.css">
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><script src="config.js"></script><script src="lib.js"></script></head>
+<body>
+<header><h1>我的專區</h1><p id="who">載入中…</p></header>
+<main>
+  <div id="msg" class="msg" hidden></div>
+  <div id="content" hidden>
+    <div class="card"><h2 id="title">我的會籍</h2><div class="light" id="light"></div><div class="kv" id="fields"></div></div>
+    <div class="card"><h2>我的報名紀錄</h2><table id="regs"></table></div>
+    <div class="card plan"><h2>其他服務</h2>
+      <a href="" data-item="委託書下載" data-phase="2">委託書下載<span>規劃中 ›</span></a>
+      <a href="" data-item="會員異動申請" data-phase="2">會員異動申請<span>規劃中 ›</span></a>
+      <a href="" data-item="取消報名・QR Code" data-phase="1">取消報名・QR Code<span>規劃中 ›</span></a>
+    </div>
+    <div class="card demo" id="demoBox" hidden>
+      <h2>展示用：切換身分</h2>
+      <p style="font-size:13px;color:#7a5200;margin:0 0 8px">此區塊僅供系統展示使用，正式版不會出現。輸入展示身分碼即可切換。</p>
+      <input id="code" maxlength="10" autocomplete="off" placeholder="展示身分碼">
+      <button class="btn gold" id="btnSwitch">切換身分</button>
+    </div>
+    <button class="btn line" id="btnUnbind">解除綁定</button>
+  </div>
+</main>
+<script>
+document.querySelectorAll('.plan a').forEach((a) => { a.href = planned(a.dataset.item, a.dataset.phase); });
+async function load(note) {
+  const r = await api('myPage');
+  if (!r.ok) { say(ERRTXT[r.error] || r.error, 'err'); return; }
+  if (!r.bound) { $('who').textContent = '尚未綁定'; say('此功能限已綁定的會員使用。' + bindLink()); $('content').hidden = true; return; }
+  $('who').textContent = r.name + '｜' + r.roles.join('、');
+  $('title').textContent = r.title;
+  $('light').innerHTML = '<span class="dot" style="background:' + esc(r.status.color) + '"></span><span style="color:' + esc(r.status.color) + '">' + esc(r.status.text) + '</span>';
+  $('fields').innerHTML = r.fields.map((f) => '<span class="k">' + esc(f.label) + '</span><span class="v">' + esc(f.value) + '</span>').join('');
+  $('regs').innerHTML = r.regs.length ? '<tr><th>活動</th><th>狀態</th><th>報名時間</th></tr>' + r.regs.map((x) => '<tr><td>' + esc(x.event) + '</td><td>' + esc(x.status) + '</td><td>' + esc(x.time) + '</td></tr>').join('') : '<tr><td>目前沒有報名紀錄</td></tr>';
+  $('demoBox').hidden = !r.demo;
+  $('content').hidden = false;
+  if (note) say(note, 'ok'); else $('msg').hidden = true;
+}
+$('btnSwitch').onclick = async () => {
+  $('btnSwitch').disabled = true;
+  const r = await api('bindByCode', { code: $('code').value });
+  $('btnSwitch').disabled = false;
+  if (!r.ok) { say(ERRTXT[r.error] || '切換失敗：' + esc(r.error), 'err'); return; }
+  $('code').value = '';
+  load('已切換為「' + esc(r.name) + '」。<b>請關閉此頁，退出聊天室再進入</b>，選單就會更新。');
+};
+$('btnUnbind').onclick = async () => {
+  if (!confirm('確定要解除綁定嗎？')) return;
+  const r = await api('unbind');
+  if (!r.ok) { say(ERRTXT[r.error] || r.error, 'err'); return; }
+  $('content').hidden = true; $('who').textContent = '已解除綁定';
+  say('已解除綁定。退出聊天室再進入，會看到訪客選單。', 'ok');
+};
+startLiff(() => load());
+</script></body></html>
